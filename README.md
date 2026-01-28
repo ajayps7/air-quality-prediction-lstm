@@ -47,7 +47,10 @@ To prevent this from happening we create a filter, the output gate, exactly as w
 Output Gate
 As mentioned, we want to apply this filter to the newly updated cell state. This ensures that only necessary information is output (saved to the new hidden state). However, before applying the filter, we pass the cell state through a tanh to force the values into the interval [-1,1].
 
-The step-by-step process for this final step is as follows: ▹ Apply the tanh function to the current cell state pointwise to obtain the squished cell state, which now lies in [-1,1]. ▹ Pass the previous hidden state and current input data through the sigmoid activated neural network to obtain the filter vector. ▹ Apply this filter vector to the squished cell state by pointwise multiplication. ▹ Output the new hidden state!
+The step-by-step process for this final step is as follows: 
+▹ Apply the tanh function to the current cell state pointwise to obtain the squished cell state, which now lies in [-1,1]. 
+▹ Pass the previous hidden state and current input data through the sigmoid activated neural network to obtain the filter vector. 
+▹ Apply this filter vector to the squished cell state by pointwise multiplication. 
+▹ Output the new hidden state!
 
-right.
 
