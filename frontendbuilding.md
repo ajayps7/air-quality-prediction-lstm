@@ -1,0 +1,79 @@
+**Streamlit Frontend Description**
+
+The Streamlit application serves as an interactive web interface for Air Quality Index (AQI) prediction using a trained LSTM model. It allows users to input environmental and pollutant data, preprocesses those inputs to match the model’s expectations, and displays the predicted AQI in real time.
+
+**Application initialization and layout**
+
+The app starts by setting a clear title and short description that communicates its purpose: predicting AQI using a deep learning model.
+
+The trained LSTM model and the saved MinMax scalers (for features and target) are loaded at startup. Loading happens once, ensuring fast predictions without retraining or refitting during user interaction.
+
+**User input interface**
+
+The frontend uses Streamlit widgets to collect numerical inputs corresponding exactly to the features used during model training. These include:
+
+Pollutant concentrations (e.g., PM2.5, PM10, NO₂, CO, SO₂, O₃, etc.)
+
+Engineered AQI features such as:
+
+Previous AQI values (lag features)
+
+Rolling AQI averages
+
+Each input field enforces numeric input, preventing invalid data types from reaching the model.
+
+**Input preprocessing (frontend-aligned with training)**
+
+Once the user provides values:
+
+Inputs are assembled into a single-row pandas DataFrame with the same column order as the training feature set.
+
+The feature scaler (loaded from disk) transforms the input data into the normalized [0, 1] range.
+
+The scaled data is reshaped into a 3D tensor with shape:
+
+(1, time_steps, number_of_features)
+
+
+This shape is mandatory for LSTM inference and mirrors the structure used during training.
+
+No preprocessing logic is duplicated or improvised—the frontend strictly reuses the saved preprocessing artifacts.
+
+**Prediction trigger**
+
+A Predict AQI button controls inference execution.
+The model does nothing until the user explicitly clicks the button, avoiding unnecessary computation and accidental predictions.
+
+**Model inference and postprocessing**
+
+When prediction is triggered:
+
+The LSTM model generates a scaled AQI prediction.
+
+The target scaler inversely transforms this value back to the original AQI scale.
+
+The result is converted into a readable numeric value.
+
+**Output display**
+
+The predicted AQI is displayed prominently on the interface, clearly labeled and easy to interpret.
+
+The UI focuses on:
+
+One prediction at a time
+
+Immediate feedback
+
+Zero technical clutter for end users
+
+**Error safety and stability**
+
+Because:
+
+Inputs are constrained to numeric widgets
+
+Feature order is fixed
+
+Scalers and model are preloaded
+
+The frontend minimizes runtime errors and ensures the model always receives valid, correctly shaped data.
